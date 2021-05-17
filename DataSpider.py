@@ -48,7 +48,6 @@ class DataSpider(Spider):
             print(len(date))
             death = temp[len(temp) // 2:]
             df = DataFrame([date, diagnosis, sums, heal, death], ['日期', '确诊病例', '累积病例', '治愈病例', '死亡病例'])
-            data[ii] = {}
             data[name] = df
             print('已爬取'+name+'的疫情信息')
             if not exists('./Data'):

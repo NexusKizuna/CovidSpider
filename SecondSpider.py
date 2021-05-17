@@ -4,6 +4,7 @@ from Pool.IpPool import IpPool
 from Pool.UserAgentPool import UserAgentPool
 from time import sleep
 from random import randint
+from pandas import DataFrame
 
 
 class SecondSpider:
@@ -45,5 +46,21 @@ class SecondSpider:
             del data_dic, data
 
     def getData(self):
-        pass
-
+        data = {}
+        for elem in range(len(self.lis)):
+            tempdata = self.lis[elem]['data']
+            diagnosis = []  # 确诊病例
+            heal = []  # 治愈病例
+            death = []  # 死亡病例
+            date = []  # 日期
+            sums = []  # 累计病例
+            for perday in tempdata:
+                diagnosis.append(perday['confirm_add'])
+                heal.append(perday['heal'])
+                death.append(perday['dead'])
+                sums.append(perday['confirm'])
+                date.append(perday['year']+perday['date'])
+            df = DataFrame([date, diagnosis, sums, heal, death], ['日期', '确诊病例', '累积病例', '治愈病例', '死亡病例'])
+            data[self.province[elem]] = df
+            
+        return data
