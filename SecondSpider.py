@@ -41,5 +41,5 @@ class SecondSpider:
             del data_dic, data
 
     def getData(self):
-        
+        pass
 
