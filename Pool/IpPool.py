@@ -39,4 +39,4 @@ class IpPool:
         return {'http': self.__ipPool[randint(0, len(self.__ipPool))]}
 
     def popIp(self, breakIp):  # 返回无法爬取的Ip
-        self.__ipPool.pop(breakIp['http'])
+        self.__ipPool.remove(breakIp['http'])
