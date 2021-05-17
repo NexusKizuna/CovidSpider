@@ -31,7 +31,7 @@ class DataSpider(Spider):
                 self.lis.append(r.text)
                 sleep(randint(2, 5) + random())
             except:
-                proxy.popIp(ip)
+                proxy.removeIp(ip)
                 sleep(randint(3, 10))
                 i = i-1
         return self.getData()

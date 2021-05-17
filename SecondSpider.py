@@ -22,13 +22,16 @@ class SecondSpider:
         error = 0
         while count < len(self.province):
             provinceName = self.province[count]
+            nowIp = ip.getIp()
             try:
-                data = rq.get(self.url+provinceName, headers=userAgent.getUserAgent(), proxies=ip.getIp())
+                data = rq.get(self.url+provinceName, headers=userAgent.getUserAgent(), proxies=nowIp)
                 data_dic = json.loads(data.text)
                 self.lis.append(data_dic)
                 sleep(randint(3, 10))
                 error = 0
             except:
+                ip.removeIp(nowIp)
+                nowIp = ip.getIp()
                 sleep(randint(5, 13))
                 if error < 5:
                     error += 1
