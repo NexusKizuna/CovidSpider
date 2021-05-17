@@ -43,4 +43,4 @@ class UserAgentPool:
         ]
 
     def getUserAgent(self, **kwargs):
-        return self.__user_agent_list[randint(0, len(self.__user_agent_list)-1)]
+        return {'User-Agent': self.__user_agent_list[randint(0, len(self.__user_agent_list)-1)]}

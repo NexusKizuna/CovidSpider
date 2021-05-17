@@ -36,7 +36,7 @@ class IpPool:
         del tempIpInformation, header, url
 
     def getIp(self):  # 外部获取Ip方式
-        return self.__ipPool[randint(0, len(self.__ipPool))]
+        return {'http': self.__ipPool[randint(0, len(self.__ipPool))]}
 
     def popIp(self, breakIp):  # 返回无法爬取的Ip
-        self.__ipPool.pop(breakIp)
+        self.__ipPool.pop(breakIp['http'])
