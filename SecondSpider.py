@@ -62,5 +62,5 @@ class SecondSpider:
                 date.append(perday['year']+perday['date'])
             df = DataFrame([date, diagnosis, sums, heal, death], ['日期', '确诊病例', '累积病例', '治愈病例', '死亡病例'])
             data[self.province[elem]] = df
-            
+
         return data
