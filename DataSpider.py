@@ -10,8 +10,10 @@ import re
 from pandas import DataFrame
 from os import mkdir
 from os.path import exists
+from SpiderClass import Spider
 
-class DataSpider:
+
+class DataSpider(Spider):
     def __init__(self):
         self.url = 'http://www.sy72.com/covid/list.asp?id='
         self.lis = []
