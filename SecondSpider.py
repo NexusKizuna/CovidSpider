@@ -29,6 +29,7 @@ class SecondSpider:
                 sleep(randint(3, 10))
                 error = 0
             except:
+                sleep(randint(5, 13))
                 if error < 5:
                     error += 1
                     count -= 1
