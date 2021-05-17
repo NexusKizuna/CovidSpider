@@ -31,7 +31,7 @@ class IpPool:
             later = [float(later[i]) for i in range(len(later))]
             for j in range(len(later)):
                 if later[j] < 5:
-                    self.__ipPool.append('http:'+ip[j]+':'+port[j])
+                    self.__ipPool.append('http://'+ip[j]+':'+port[j])
             del checkhtml, ip, later, port
         del tempIpInformation, header, url
 
