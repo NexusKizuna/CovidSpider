@@ -3,6 +3,8 @@ import json
 from Pool.IpPool import IpPool
 from Pool.UserAgentPool import UserAgentPool
 from time import sleep
+from random import randint
+
 
 class SecondSpider:
     def __init__(self):
@@ -14,4 +16,30 @@ class SecondSpider:
                          '福建', '广东', '广西', '云南', '台湾', '海南', '澳门', '香港']
 
     def start(self):
-        pass
+        ip = IpPool()
+        userAgent = UserAgentPool()
+        count = 0
+        error = 0
+        while count < len(self.province):
+            provinceName = self.province[count]
+            try:
+                data = rq.get(self.url+provinceName, headers=userAgent.getUserAgent(), proxies=ip.getIp())
+                data_dic = json.loads(data.text)
+                self.lis.append(data_dic)
+                sleep(randint(3, 10))
+                error = 0
+            except:
+                if error < 5:
+                    error += 1
+                    count -= 1
+                elif error == 5:
+                    self.lis.append('')
+                    error = 0
+
+            count += 1
+
+            del data_dic, data
+
+    def getData(self):
+        
+
