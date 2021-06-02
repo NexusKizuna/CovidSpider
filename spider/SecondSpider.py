@@ -1,13 +1,14 @@
 import requests as rq
 import json
-from Pool.IpPool import IpPool
-from Pool.UserAgentPool import UserAgentPool
 from time import sleep
 from random import randint
 from pandas import DataFrame
+from Pool.IpPool import IpPool
+from Pool.UserAgentPool import UserAgentPool
 
 
 # 从QQ的接口获取疫情数据的爬虫
+
 
 class SecondSpider:
     def __init__(self):
@@ -23,9 +24,11 @@ class SecondSpider:
         userAgent = UserAgentPool()  # 实例化user-agent池
         count = 0
         error = 0
+        print('开始爬取', end='\n')
         while count < len(self.province):
             provinceName = self.province[count]
             nowIp = ip.getIp()  # 从ip池中获取代理ip
+            print('现在爬取: '+provinceName, end='\n')
             try:
                 data = rq.get(self.url+provinceName, headers=userAgent.getUserAgent(), proxies=nowIp)  # 爬取数据
                 data_dic = json.loads(data.text)
@@ -46,10 +49,12 @@ class SecondSpider:
             count += 1
 
             del data_dic, data
+        print('爬取完毕', end='\n')
         return self.getData()
 
     def getData(self):
         data = {}
+        print('开始处理数据', end='\n')
         for elem in range(len(self.lis)):
             tempdata = self.lis[elem]['data']
             diagnosis = []  # 确诊病例
@@ -62,8 +67,8 @@ class SecondSpider:
                 heal.append(perday['heal'])
                 death.append(perday['dead'])
                 sums.append(perday['confirm'])
-                date.append(perday['year']+perday['date'])
+                date.append(str(perday['year'])+str(perday['date']))
             df = DataFrame([date, diagnosis, sums, heal, death], ['日期', '确诊病例', '累积病例', '治愈病例', '死亡病例'])
             data[self.province[elem]] = df
-
+        print('数据处理结束', end='\n')
         return data  # 返回了字典类型 {省份：数据,......}
