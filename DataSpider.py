@@ -17,15 +17,23 @@ class DataSpider(Spider):
     def __init__(self):
         self.url = 'http://www.sy72.com/covid/list.asp?id='
         self.lis = []
+        self.id = {439: '湖北', 440: '浙江', 441: '广东', 442: '河南', 443: '湖南', 444: '安徽',
+                   445: '重庆', 446: '江西', 447: '山东', 448: '四川', 449: '江苏', 450: '北京',
+                   451: '上海', 452: '福建', 453: '广西', 454: '云南', 455: '陕西', 456: '河北',
+                   457: '海南', 458: '黑龙江', 459: '辽宁', 460: '山西', 461: '天津', 462: '甘肃',
+                   463: '内蒙古', 464: '宁夏', 465: '新疆', 466: '吉林', 467: '贵州', 468: '香港',
+                   469: '台湾', 470: '青海', 471: '澳门', 472: '西藏'}
 
-    def start(self, n):
+    def start(self):
         header = UserAgentPool()
         proxy = IpPool()
-        for i in range(n):
+        i = 0
+        idList = list(self.id.keys())
+        while i < len(self.id):
             ip = ''
             try:
                 ip = proxy.getIp()
-                r = rq.get(self.url + str(i + 1) + '&s1=0&s2=0',
+                r = rq.get(self.url + idList[i] + '&s1=0&s2=0',
                            headers=header.getUserAgent(), proxies=ip)
                 r.encoding = 'utf-8'
                 self.lis.append(r.text)
@@ -34,6 +42,8 @@ class DataSpider(Spider):
                 proxy.removeIp(ip)
                 sleep(randint(3, 10))
                 i = i-1
+            i += 1
+
         return self.getData()
 
     def getData(self):
@@ -54,7 +64,8 @@ class DataSpider(Spider):
                 mkdir('Data')
             df.to_csv('./Data/' + name + '.csv', encoding='utf_8_sig')
         return data
-                
+
+
 if __name__ == '__main__':
     pass
 

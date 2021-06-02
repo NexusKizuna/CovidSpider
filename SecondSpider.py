@@ -7,6 +7,8 @@ from random import randint
 from pandas import DataFrame
 
 
+# 从QQ的接口获取疫情数据的爬虫
+
 class SecondSpider:
     def __init__(self):
         self.url = 'https://api.inews.qq.com/newsqa/v1/query/pubished/daily/list?province='
@@ -17,33 +19,34 @@ class SecondSpider:
                          '福建', '广东', '广西', '云南', '台湾', '海南', '澳门', '香港']
 
     def start(self):
-        ip = IpPool()
-        userAgent = UserAgentPool()
+        ip = IpPool()  # 实例化ip池
+        userAgent = UserAgentPool()  # 实例化user-agent池
         count = 0
         error = 0
         while count < len(self.province):
             provinceName = self.province[count]
-            nowIp = ip.getIp()
+            nowIp = ip.getIp()  # 从ip池中获取代理ip
             try:
-                data = rq.get(self.url+provinceName, headers=userAgent.getUserAgent(), proxies=nowIp)
+                data = rq.get(self.url+provinceName, headers=userAgent.getUserAgent(), proxies=nowIp)  # 爬取数据
                 data_dic = json.loads(data.text)
                 self.lis.append(data_dic)
                 sleep(randint(3, 10))
                 error = 0
-            except:
+            except:  # 爬取数据失败时，重新获取代理Ip并剔除原代理Ip
                 ip.removeIp(nowIp)
                 nowIp = ip.getIp()
                 sleep(randint(5, 13))
-                if error < 5:
+                if error < 4:  # 若重复5次爬取都未成功，则放弃爬取该城市的数据
                     error += 1
                     count -= 1
-                elif error == 5:
+                elif error == 4:
                     self.lis.append('')
                     error = 0
 
             count += 1
 
             del data_dic, data
+        return self.getData()
 
     def getData(self):
         data = {}
@@ -63,4 +66,4 @@ class SecondSpider:
             df = DataFrame([date, diagnosis, sums, heal, death], ['日期', '确诊病例', '累积病例', '治愈病例', '死亡病例'])
             data[self.province[elem]] = df
 
-        return data
+        return data  # 返回了字典类型 {省份：数据,......}
