@@ -67,7 +67,7 @@ class SecondSpider:
                 heal.append(perday['heal'])
                 death.append(perday['dead'])
                 sums.append(perday['confirm'])
-                date.append(str(perday['year'])+str(perday['date']))
+                date.append(str(perday['year'])+perday['date'])
             df = DataFrame([date, diagnosis, sums, heal, death], ['日期', '确诊病例', '累积病例', '治愈病例', '死亡病例'])
             data[self.province[elem]] = df
         print('数据处理结束', end='\n')
