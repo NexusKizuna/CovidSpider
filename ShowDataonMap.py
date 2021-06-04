@@ -8,16 +8,16 @@ from os import system
 class ShowDataonMap:
     def __init__(self, dataDic):
         self.__country = list(dataDic.keys())
-        self.__data = [(local, dataDic[local]) for local in self.__country]
+        self.__data = [(local, dataDic[local].iloc[1, 8]) for local in self.__country]
 
     def SetMap(self):
         tempList = [self.__data[i][1] for i in range(len(self.__data))]
         max = 0
         for num in tempList:
-            if max >= num:
+            if max >= int(num):
                 continue
             else:
-                max = num
+                max = int(num)
         map = Map()
         map.add('确诊', self.__data, 'china')
         map.set_global_opts(title_opts=opts.TitleOpts(title='China Map'),
